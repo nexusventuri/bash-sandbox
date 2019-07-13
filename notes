@@ -1,0 +1,22 @@
+There are 4 ways I can do sub commands:
+
+alias
+alias_/
+alias_/list
+
+or
+
+alias
+alias_list
+alias_list_known
+
+or
+
+alias/
+alias/alias
+alias/list
+
+or
+alias/command
+alias/list/command
+alias/list/known/command

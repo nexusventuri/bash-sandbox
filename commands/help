@@ -1,0 +1,77 @@
+#!/bin/bash
+# params: [COMMAND]
+# desc: Prints this help or detailed help for commands running $project help COMMAND
+# You can run help against sub commands
+# examples: 
+# $project help help     prints this help
+# $project help hello    prints a detailed help for the hello command
+
+set -e
+
+function print_commands_by_folder {
+  dir="$1"
+
+  for file in $(find "$dir" -executable -type f); do
+    command_name=$(basename $file)
+    description=$(description "$file")
+    params=$(params "$file")
+
+    OUTPUT="$OUTPUT\n\n$command_name@@$params@@$description"
+  done
+  echo "Usage: $(project_name) COMMAND ARGS"
+  echo 
+  echo -ne "$OUTPUT\n"  | column -t -s"@@" -c30
+}
+
+function print_command_help {
+  file="$1"
+
+  command_name=$(basename $file)
+  description=$(description "$file")
+  params=$(params "$file")
+  echo "NAME:"
+  echo "$(project_name) $command_name - $description"
+  echo 
+
+  if [[ ! -z "$params" ]]; then
+    echo "SYNOPSYS:"
+    echo "$(project_name) $command_name $params"
+    echo
+  fi
+
+  full_description=$(full_description "$file")
+  echo "DESCRIPTION:"
+  echo "$full_description"
+}
+
+function description {
+  header_comment=$(header_comment "$1")
+  extract_lines "$header_comment" "# desc: "
+}
+
+function full_description {
+  header_comment=$(header_comment "$1")
+  echo "$header_comment" | grep -v "^# \(desc:\|params:\)" | sed "s/^#\s*//"
+}
+
+function params {
+  header_comment=$(header_comment "$1")
+  extract_lines "$header_comment" "# params: "
+}
+
+function header_comment {
+  file="$1"
+  sed '/^[^#]/q' "$file" | sed \$d | sed '/^#!/d' | sed "s/\$project/$(project_name)/g"
+}
+
+function extract_lines {
+  string="$1"
+  text="$2"
+  echo "$string" | grep "$text" | sed "s/^$text//"
+}
+
+if [[ "$1" == "" ]]; then
+  print_commands_by_folder $(commands_path)
+else
+  print_command_help $(commands_path $1)
+fi

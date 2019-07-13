@@ -1,0 +1,9 @@
+#!/bin/bash
+# desc: lets you create an alias comand
+# It helps creating aliases
+#
+# examples: 
+# $project alias         creates a new alias
+# $project help hello    prints a detailed help for the hello command
+
+echo "ciao $(project_path)"
