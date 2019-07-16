@@ -5,9 +5,12 @@ Playing around with bash, trying to figure out the best way to structure some co
 
 # Set of features I'd like to have
 
+# Be able to introduce new commands
+- `playground g command [command_name]` Creates a file that can then be edited
+
 ## command/sub-command namespace for bash script. So users of the script can:
 
-- Invoke a command. e.g. `playground command`
+- Invoke a command. e.g. `playground [command]`
 - Invoke a sub command. e.g. `playground go left`
 
 With a nice way to organize the code
@@ -19,13 +22,14 @@ With a nice way to organize the code
 
 ## Create a auto generated bash completion
 
-- `playground completion`
+- `playground build bash`
+- `playground build zsh`
 
 ## Be able to create aliases
 
 - `playground alias` Generates aliases for commands
 - `playground alias list`
 
-# Be able to introduce new commands
-- `playground g command [command_name]` Creates a file that can then be edited
-
+# Be able to show a list of libraries and functions
+- `playground libraries` Shows all libraries
+- `playground help [lib_file]` Shows functions/global variables for that file

@@ -30,7 +30,7 @@ function print_command_help {
   description=$(description "$file")
   params=$(params "$file")
   echo "NAME:"
-  echo "$(project_name) $command_name - $description"
+  echo "$(project_name) $command_name"
   echo 
 
   if [[ ! -z "$params" ]]; then
@@ -41,6 +41,8 @@ function print_command_help {
 
   full_description=$(full_description "$file")
   echo "DESCRIPTION:"
+  echo 
+  echo "$description"
   echo "$full_description"
 }
 
