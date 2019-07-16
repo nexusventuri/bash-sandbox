@@ -1,0 +1,46 @@
+#!/bin/bash
+# params: [COMMAND_NAME]
+# desc: Creates a new command called COMMAND_NAME
+# 
+# examples: 
+# $project generate command lala
+#
+# it creates a new command that can be invoked by using:
+# $project lala
+#
+#
+# $project generate command alias list
+#
+# it creates a new command that can be invoked using:
+# $project alias list
+#
+
+command_name=$1
+command_path=$(commands_path $1)
+
+if [[ -z "$command_name" ]]; then
+  show_help generate command
+  exit 1
+elif [[ -f "$command_name" ]]; then
+  echo "Command $command_name already exists"
+  exit 1
+elif [[ ! "$command_name" =~ ^[a-zA-Z_-]+$ ]]; then
+  echo 'Wrong command name. Only a-zA-Z _ - characters are allowed'
+  exit 1
+fi
+
+content=$(cat <<TEMPLATE
+#!/bin/bash
+#
+
+echo "This command does not do anything yet"
+echo "please modify the file"
+echo "$command_path"
+TEMPLATE
+)
+
+echo "$content" > "$command_path"
+
+chmod u+x "$command_path"
+
+

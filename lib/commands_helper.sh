@@ -40,11 +40,41 @@ function show_help {
   $help_command $@
 }
 
-function execute_command {
+function command_to_path {
   command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1"
+  sub_command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
 
-  if [[ -f "$command" && -x "$command" ]]; then
-    $command "${@:2}"
+  if [[ -f "$sub_command" && -x "$sub_command" ]]; then
+    echo "$sub_command"
+  elif [[ -f "$command" && -x "$command" ]]; then
+    echo "$command"
+  else
+    echo "/??/"
+  fi
+}
+
+function is_sub_command {
+  sub_command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
+
+  if [[ -f "$sub_command" && -x "$sub_command" ]]; then
+    true
+  else
+    false
+  fi
+}
+
+function file_name_to_command {
+  echo "$1" | sed "s|^$_COMMAND_DIR_EXPOSED_FOR_HELPERS||g" | sed "s/_/ /g" | sed 's/\///g'
+}
+
+function execute_command {
+  command_path=$(command_to_path ${@:1})
+
+  if is_sub_command "${@:1}"; then
+    $command_path "${@:3}"
+    exit $?
+  elif [[ -f "$command_path" ]]; then
+    $command_path "${@:2}"
     exit $?
   elif [[ -z "$1" ]]; then
     show_help "${@:2}"
@@ -65,6 +95,9 @@ export -f execute_command
 export -f commands_path
 export -f project_path
 export -f project_name
+
+export -f command_to_path
+export -f file_name_to_command
 
 export _LIB_DIR_EXPOSED_FOR_HELPERS
 export _COMMAND_DIR_EXPOSED_FOR_HELPERS

@@ -12,7 +12,7 @@ function print_commands_by_folder {
   dir="$1"
 
   for file in $(find "$dir" -executable -type f); do
-    command_name=$(basename $file)
+    command_name=$(file_name_to_command $file)
     description=$(description "$file")
     params=$(params "$file")
 
@@ -24,9 +24,16 @@ function print_commands_by_folder {
 }
 
 function print_command_help {
-  file="$1"
+  file=$(command_to_path ${@:1})
 
-  command_name=$(basename $file)
+  if [[ ! -f "$file" ]]; then
+    echo "Sorry, can't find the command $1 $2 "
+    show_help
+    exit 1
+  fi
+
+  command_name=$(file_name_to_command $file)
+  echo "command_name: $command_name"
   description=$(description "$file")
   params=$(params "$file")
   echo "NAME:"
@@ -75,5 +82,5 @@ function extract_lines {
 if [[ "$1" == "" ]]; then
   print_commands_by_folder $(commands_path)
 else
-  print_command_help $(commands_path $1)
+  print_command_help ${@:1}
 fi
