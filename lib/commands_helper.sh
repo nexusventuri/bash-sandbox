@@ -53,16 +53,6 @@ function command_to_path {
   fi
 }
 
-function is_sub_command {
-  sub_command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
-
-  if [[ -f "$sub_command" && -x "$sub_command" ]]; then
-    true
-  else
-    false
-  fi
-}
-
 function file_name_to_command {
   echo "$1" | sed "s|^$_COMMAND_DIR_EXPOSED_FOR_HELPERS||g" | sed "s/_/ /g" | sed 's/\///g'
 }
@@ -84,6 +74,16 @@ function execute_command {
     echo ""
     show_help "${@:2}"
     exit 1
+  fi
+}
+
+function is_sub_command {
+  sub_command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
+
+  if [[ -f "$sub_command" && -x "$sub_command" ]]; then
+    true
+  else
+    false
   fi
 }
 

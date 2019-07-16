@@ -16,16 +16,18 @@
 #
 
 command_name=$1
-command_path=$(commands_path $1)
 
 if [[ -z "$command_name" ]]; then
   show_help generate command
   exit 1
-elif [[ -f "$command_name" ]]; then
+fi
+
+command_path=$(commands_path $1)
+if [[ -f "$command_path" ]]; then
   echo "Command $command_name already exists"
   exit 1
-elif [[ ! "$command_name" =~ ^[a-zA-Z_-]+$ ]]; then
-  echo 'Wrong command name. Only a-zA-Z _ - characters are allowed'
+elif [[ ! "$command_name" =~ ^[0-9a-zA-Z_-]+$ ]]; then
+  echo 'Wrong command name. Only 0-9 a-z A-Z _ - characters are allowed'
   exit 1
 fi
 
