@@ -98,6 +98,7 @@ export -f project_name
 
 export -f command_to_path
 export -f file_name_to_command
+export -f is_sub_command
 
 export _LIB_DIR_EXPOSED_FOR_HELPERS
 export _COMMAND_DIR_EXPOSED_FOR_HELPERS

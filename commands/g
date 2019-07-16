@@ -2,4 +2,4 @@
 # alias: generate
 #
 
-execute_command generate "${@:2}"
+execute_command generate "${@:1}"

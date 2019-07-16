@@ -43,6 +43,8 @@ TEMPLATE
 
 echo "$content" > "$command_path"
 
+echo "done! you can edit the file on"
+echo "$command_path"
 chmod u+x "$command_path"
 
 
