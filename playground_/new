@@ -1,0 +1,28 @@
+#!/bin/bash
+# params: [COMMAND]
+# desc: create a new command callend COMMAND, and sets up help and basic folder structure
+#
+# examples:
+# $project new ken
+#
+# it creates a new command called 'ken', that will have a basic help functionality:
+# ken help
+#
+
+set -e
+command_name=$1
+
+new_command_path=$(project_path "$command_name")
+if [[ -f $new_command_path ]]; then
+  echo "command $command_name already exists"
+  
+elif [[ ! "$command_name" =~ ^[0-9a-zA-Z_-]+$ ]]; then
+  echo 'Wrong name. Only 0-9 a-z A-Z _ - characters are allowed'
+  exit 1
+fi
+
+echo "Generating $command_name"
+
+cp "$(project_path $(project_name))" "$new_command_path"
+mkdir "${new_command_path}_"
+cp "$(project_path $(project_name))_/help" "${new_command_path}_/help"
