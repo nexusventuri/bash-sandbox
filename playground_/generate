@@ -1,5 +1,5 @@
 #!/bin/bash
-# params: {generate}
+# params: {command}
 # desc: call $project generate command to create a new command
 # 
 # examples: 
