@@ -17,8 +17,8 @@ With a nice way to organize the code
 
 ## Have a nice way to get help for commands
 - Get a list of available commands `playground help`
-- Invoke a sub command. e.g. `playground help alias list`
-- Get a list of available commands `playground help alias`
+- Invoke a sub command. e.g. `playground help generate`
+- Get a list of available commands `playground help`
 
 ## Create a auto generated bash completion
 
