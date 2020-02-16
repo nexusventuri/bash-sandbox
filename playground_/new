@@ -1,12 +1,12 @@
 #!/bin/bash
 # params: [COMMAND]
-# desc: create a new command callend COMMAND, and sets up help and basic folder structure
+# desc: create a new command called COMMAND, and sets up help and basic folder structure
 #
 # examples:
-# $project new ken
+# $project new runner
 #
-# it creates a new command called 'ken', that will have a basic help functionality:
-# ken help
+# it creates a new command called 'runner', that will have a basic help functionality:
+# runner help
 #
 
 set -e

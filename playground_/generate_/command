@@ -1,0 +1,51 @@
+#!/bin/bash
+# params: [COMMAND_NAME]
+# desc: Creates a new sub command called COMMAND_NAME 
+# 
+# examples: 
+# $project generate command lala
+#
+# it creates a new sub command command that can be invoked by using:
+# $project lala
+#
+#
+# $project generate command alias list
+#
+# it creates a new command that can be invoked using:
+# $project alias list
+#
+
+set -e
+command_name=$@
+
+if [[ -z "$command_name" ]]; then
+  show_help generate command
+  exit 1
+fi
+
+command_path=$(generate_path_for_new_command $@)
+echo "path: $command_path"
+if [[ -f "$command_path" ]]; then
+  echo "Command $command_name already exists"
+  exit 1
+fi
+
+content=$(cat <<TEMPLATE
+#!/bin/bash
+#
+
+echo "This command does not do anything yet"
+echo "please modify the file"
+echo "$command_path"
+TEMPLATE
+)
+
+mkdir -p $(dirname $command_path)
+
+echo "$content" > "$command_path"
+
+echo "done! you can edit the file on"
+echo "$command_path"
+chmod u+x "$command_path"
+
+

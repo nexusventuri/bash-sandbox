@@ -1,50 +1,21 @@
 #!/bin/bash
-# params: [COMMAND_NAME]
-# desc: Creates a new sub command called COMMAND_NAME for the currently selected command: $TARGET_PROJECT
+# params: {generate}
+# desc: call $project generate command to create a new command
 # 
 # examples: 
 # $project generate command lala
 #
 # it creates a new sub command command that can be invoked by using:
-# $TARGET_PROJECT lala
+# $project lala
 #
 #
 # $project generate command alias list
 #
 # it creates a new command that can be invoked using:
-# $TARGET_PROJECT alias list
+# $project alias list
 #
 
-command_name=$1
+echo "Argument missing"
+echo ""
 
-if [[ -z "$command_name" ]]; then
-  show_help generate command
-  exit 1
-fi
-
-command_path=$(commands_path $1)
-if [[ -f "$command_path" ]]; then
-  echo "Command $command_name already exists"
-  exit 1
-elif [[ !  "$command_name" =~ ^[0-9a-zA-Z_-]+$ ]]; then
-  echo 'Wrong name. Only 0-9 a-z A-Z _ - characters are allowed'
-  exit 1
-fi
-
-content=$(cat <<TEMPLATE
-#!/bin/bash
-#
-
-echo "This command does not do anything yet"
-echo "please modify the file"
-echo "$command_path"
-TEMPLATE
-)
-
-echo "$content" > "$command_path"
-
-echo "done! you can edit the file on"
-echo "$command_path"
-chmod u+x "$command_path"
-
-
+show_help "generate"

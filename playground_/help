@@ -24,7 +24,7 @@ function print_commands_by_folder {
 }
 
 function print_command_help {
-  file=$(command_to_path ${@:1})
+  file=$(find_existing_command_path ${@:1})
 
   if [[ ! -f "$file" ]]; then
     echo "Sorry, can't find the command $1 $2 "
@@ -33,11 +33,10 @@ function print_command_help {
   fi
 
   command_name=$(file_name_to_command $file)
-  echo "command_name: $command_name"
   description=$(description "$file")
   params=$(params "$file")
   echo "NAME:"
-  echo "$(project_name) $command_name"
+  echo "$(project_name) $command_name - $description"
   echo 
 
   if [[ ! -z "$params" ]]; then
@@ -49,7 +48,6 @@ function print_command_help {
   full_description=$(full_description "$file")
   echo "DESCRIPTION:"
   echo 
-  echo "$description"
   echo "$full_description"
 }
 

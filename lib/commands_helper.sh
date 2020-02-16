@@ -9,6 +9,12 @@ _COMMAND_DIR_EXPOSED_FOR_HELPERS="$_PROJECT_DIR_EXPOSED_FOR_HELPERS/${_PROJECT_N
 # echo "project name: $_PROJECT_NAME_EXPOSED_FOR_HELPERS"
 # echo "command dir: $_COMMAND_DIR_EXPOSED_FOR_HELPERS"
 
+set -e
+settings_file="${_PROJECT_DIR_EXPOSED_FOR_HELPERS}/.${_PROJECT_NAME_EXPOSED_FOR_HELPERS}"
+if [[ -f "$settings_file" ]]; then
+  source "$settings_file"
+fi
+
 function commands_path {
   echo "$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1"
 }
@@ -43,7 +49,7 @@ function show_help {
   $help_command $@
 }
 
-function command_to_path {
+function find_existing_command_path {
   command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1"
   sub_command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
 
@@ -56,12 +62,37 @@ function command_to_path {
   fi
 }
 
+function generate_path_for_new_command {
+  if [[ "$(validate_command_name $1)" == "1" ]]; then 
+    echo 'invalid command name'
+    exit 1
+  fi
+
+  command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1"
+  if [[ "$2" != "" ]]; then
+    if [[  "$(validate_command_name $2)" == "1" ]]; then
+      echo 'invalid sub command name'
+    else
+      command="$_COMMAND_DIR_EXPOSED_FOR_HELPERS/$1_/$2"
+    fi
+  fi
+  echo "$command"
+}
+
+function validate_command_name {
+  echo "$1"
+  if [[ ! $1 =~ ^[0-9a-zA-Z_-]+$ ]]; then
+    return 1
+  fi
+  return 0
+}
+
 function file_name_to_command {
   echo "$1" | sed "s|^$_COMMAND_DIR_EXPOSED_FOR_HELPERS||g" | sed "s/_/ /g" | sed 's/\///g'
 }
 
 function execute_command {
-  command_path=$(command_to_path ${@:1})
+  command_path=$(find_existing_command_path ${@:1})
 
   if is_sub_command "${@:1}"; then
     $command_path "${@:3}"
@@ -99,7 +130,9 @@ export -f commands_path
 export -f project_path
 export -f project_name
 
-export -f command_to_path
+export -f find_existing_command_path
+export -f validate_command_name
+export -f generate_path_for_new_command 
 export -f file_name_to_command
 export -f is_sub_command
 
