@@ -70,7 +70,7 @@ function params {
 
 function header_comment {
   file="$1"
-  sed '/^[^#]/q' "$file" | sed \$d | sed '/^#!/d' | sed "s/\$project/$(project_name)/g"
+  sed '/^[^#]/q' "$file" | sed \$d | sed '/^#!/d' | sed "s/\$project/$(project_name)/g" | envsubst
 }
 
 function extract_lines {
