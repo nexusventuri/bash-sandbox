@@ -38,7 +38,6 @@ function require_relative {
   source "$required_file"
 }
 
-
 function show_help {
   help_command=$(commands_path "help")
   $help_command $@
