@@ -1,5 +1,0 @@
-#!/bin/bash
-# alias: generate
-#
-
-execute_command generate "${@:1}"

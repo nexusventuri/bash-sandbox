@@ -1,6 +1,6 @@
 #!/bin/bash
-# params: [COMMAND_NAME]
-# desc: Creates a new sub command called COMMAND_NAME 
+# params: [COMMAND]
+# desc: Creates a new sub command called COMMAND 
 # 
 # examples: 
 # $project generate command lala

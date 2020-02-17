@@ -1,6 +1,6 @@
 #!/bin/bash
-# params: {command}
-# desc: call $project generate command to create a new command
+# params: [SUBCOMMAND]
+# desc: Allows to create sub commands for $project 
 # 
 # examples: 
 # $project generate command lala
