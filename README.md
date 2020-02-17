@@ -25,11 +25,6 @@ With a nice way to organize the code
 - `playground build bash`
 - `playground build zsh`
 
-## Be able to create aliases
-
-- `playground alias` Generates aliases for commands
-- `playground alias list`
-
 # Be able to show a list of libraries and functions
 - `playground libraries` Shows all libraries
 - `playground help [lib_file]` Shows functions/global variables for that file
