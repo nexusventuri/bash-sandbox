@@ -88,7 +88,7 @@ function validate_command_name {
 }
 
 function file_name_to_command {
-  echo "$1" | sed "s|^$_COMMAND_DIR_EXPOSED_FOR_HELPERS||g" | sed "s/_/ /g" | sed 's/\///g'
+  echo "$1" | sed "s|^$_COMMAND_DIR_EXPOSED_FOR_HELPERS||g" | sed "s/_\// /g" | sed 's/\///g'
 }
 
 function execute_command {
