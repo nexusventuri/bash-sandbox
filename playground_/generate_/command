@@ -1,11 +1,11 @@
 #!/bin/bash
-# params: [COMMAND_NAME]
-# desc: Creates a new command called COMMAND_NAME
+# params: [COMMAND]
+# desc: Creates a new sub command called COMMAND 
 # 
 # examples: 
 # $project generate command lala
 #
-# it creates a new command that can be invoked by using:
+# it creates a new sub command command that can be invoked by using:
 # $project lala
 #
 #
@@ -15,19 +15,18 @@
 # $project alias list
 #
 
-command_name=$1
+set -e
+command_name=$@
 
 if [[ -z "$command_name" ]]; then
   show_help generate command
   exit 1
 fi
 
-command_path=$(commands_path $1)
+command_path=$(generate_path_for_new_command $@)
+echo "path: $command_path"
 if [[ -f "$command_path" ]]; then
   echo "Command $command_name already exists"
-  exit 1
-elif [[ ! "$command_name" =~ ^[0-9a-zA-Z_-]+$ ]]; then
-  echo 'Wrong command name. Only 0-9 a-z A-Z _ - characters are allowed'
   exit 1
 fi
 
@@ -40,6 +39,8 @@ echo "please modify the file"
 echo "$command_path"
 TEMPLATE
 )
+
+mkdir -p $(dirname $command_path)
 
 echo "$content" > "$command_path"
 

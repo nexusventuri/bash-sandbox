@@ -1,0 +1,31 @@
+#!/bin/bash
+# params: [COMMAND]
+# desc: create a new command called COMMAND, and sets up help and basic folder structure
+#
+# examples:
+# $project new runner
+#
+# it creates a new command called 'runner', that will have a basic help functionality:
+# runner help
+#
+
+set -e
+command_name=$1
+
+new_command_path=$(project_path "$command_name")
+if [[ -f $new_command_path ]]; then
+  echo "command $command_name already exists"
+  
+elif [[ "$(validate_command_name $command_name)" == "1" ]]; then
+  echo 'Wrong name. Only 0-9 a-z A-Z _ - characters are allowed'
+  exit 1
+fi
+
+echo "Generating $command_name"
+
+cp "$(project_path $(project_name))" "$new_command_path"
+mkdir "${new_command_path}_"
+cp "$(project_path $(project_name))_/help" "${new_command_path}_/help"
+cp "$(project_path $(project_name))_/generate" "${new_command_path}_/generate"
+mkdir "${new_command_path}_/generate_"
+cp -r "$(project_path $(project_name))_/generate_/command" "${new_command_path}_/generate_/command"

@@ -1,0 +1,21 @@
+#!/bin/bash
+# params: [SUBCOMMAND]
+# desc: Allows to create sub commands for $project 
+# 
+# examples: 
+# $project generate command lala
+#
+# it creates a new sub command command that can be invoked by using:
+# $project lala
+#
+#
+# $project generate command alias list
+#
+# it creates a new command that can be invoked using:
+# $project alias list
+#
+
+echo "Argument missing"
+echo ""
+
+show_help "generate"

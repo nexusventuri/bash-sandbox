@@ -7,24 +7,47 @@
 # $project help hello    prints a detailed help for the hello command
 
 set -e
+HELP_LINE_SPLIT=(17 34 65)
 
 function print_commands_by_folder {
   dir="$1"
 
-  for file in $(find "$dir" -executable -type f); do
-    command_name=$(file_name_to_command $file)
-    description=$(description "$file")
-    params=$(params "$file")
-
-    OUTPUT="$OUTPUT\n\n$command_name@@$params@@$description"
-  done
   echo "Usage: $(project_name) COMMAND ARGS"
   echo 
-  echo -ne "$OUTPUT\n"  | column -t -s"@@" -c30
+  for file in $(find "$dir" -executable -type f); do
+    command_name=$(file_name_to_command $file)
+    IFS=$'\n'; command_name_array=($(split_string_in_lines_by_width "$command_name" "${HELP_LINE_SPLIT[0]}"))
+
+    params=$(params "$file")
+    IFS=$'\n'; params_array=($(split_string_in_lines_by_width "$params" "${HELP_LINE_SPLIT[1]}"))
+
+    description=$(description "$file")
+
+    IFS=$'\n'; description_array=($(split_string_in_lines_by_width "$description" "${HELP_LINE_SPLIT[2]}"))
+
+    row_length=$(max_line_length "${#command_name_array[@]}" "${#description_array[@]}" "${#params_array[@]}")
+
+    ###OUTPUT="$OUTPUT\n\n$command_name@@$params@@$description"
+    for i in $(seq 0 $row_length)
+    do
+      command_line=$(printf "%-${HELP_LINE_SPLIT[0]}s" "${command_name_array[$i]}")
+      params_line=$(printf "%-${HELP_LINE_SPLIT[1]}s" "${params_array[$i]}")
+      description_line=$(printf "%-${HELP_LINE_SPLIT[2]}s" "${description_array[$i]}")
+      echo "$command_line $params_line $description_line"
+    done
+  done
+}
+
+function split_string_in_lines_by_width {
+  echo "$1" | fold -sw $2
+}
+
+function max_line_length {
+  echo "$@" | tr ' ' '\n' | sort -g | tail -n 1
 }
 
 function print_command_help {
-  file=$(command_to_path ${@:1})
+  file=$(find_existing_command_path ${@:1})
 
   if [[ ! -f "$file" ]]; then
     echo "Sorry, can't find the command $1 $2 "
@@ -33,11 +56,10 @@ function print_command_help {
   fi
 
   command_name=$(file_name_to_command $file)
-  echo "command_name: $command_name"
   description=$(description "$file")
   params=$(params "$file")
   echo "NAME:"
-  echo "$(project_name) $command_name"
+  echo "$(project_name) $command_name - $description"
   echo 
 
   if [[ ! -z "$params" ]]; then
@@ -49,7 +71,6 @@ function print_command_help {
   full_description=$(full_description "$file")
   echo "DESCRIPTION:"
   echo 
-  echo "$description"
   echo "$full_description"
 }
 
@@ -70,7 +91,7 @@ function params {
 
 function header_comment {
   file="$1"
-  sed '/^[^#]/q' "$file" | sed \$d | sed '/^#!/d' | sed "s/\$project/$(project_name)/g"
+  sed '/^[^#]/q' "$file" | sed \$d | sed '/^#!/d' | sed "s/\$project/$(project_name)/g" | envsubst
 }
 
 function extract_lines {

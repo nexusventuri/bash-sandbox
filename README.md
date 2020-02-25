@@ -17,18 +17,13 @@ With a nice way to organize the code
 
 ## Have a nice way to get help for commands
 - Get a list of available commands `playground help`
-- Invoke a sub command. e.g. `playground help alias list`
-- Get a list of available commands `playground help alias`
+- Invoke a sub command. e.g. `playground help generate`
+- Get a list of available commands `playground help`
 
 ## Create a auto generated bash completion
 
 - `playground build bash`
 - `playground build zsh`
-
-## Be able to create aliases
-
-- `playground alias` Generates aliases for commands
-- `playground alias list`
 
 # Be able to show a list of libraries and functions
 - `playground libraries` Shows all libraries
